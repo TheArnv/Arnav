@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arnav Sharma</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        /* ----- FULL SCREEN WATER (complete cover) ----- */
+        body {
+            min-height: 100vh;
+            width: 100%;
+            background: radial-gradient(circle at 30% 40%, #6ab0ec, #1f6faa 80%, #094677);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.8rem 1.2rem;
+            cursor: none;          /* hide default, show custom cursor */
+            overflow-x: hidden;
+        }
+
+        /* water surface layers – fill entire screen */
+        .water-cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(230, 245, 255, 0.35) 0%, transparent 45%),
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 15px, transparent 15px, transparent 35px),
+                linear-gradient(135deg, #3f9be0, #7fc4f0, #b3dcff);
+            box-shadow: inset 0 0 90px #8cc3f0, 0 0 0 2px rgba(255,255,255,0.2) inset;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.99;
+            backdrop-filter: blur(1px);
+        }
+
+        /* floating wave pattern */
+        .water-pattern {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" opacity="0.12"><path d="M0 35 Q 30 15, 60 35 T 120 35 T 180 35 T 240 35" stroke="white" fill="none" stroke-width="3"/><path d="M0 85 Q 40 105, 85 85 T 160 85 T 220 85" stroke="white" fill="none" stroke-width="2.5" opacity="0.6"/><circle cx="90" cy="20" r="14" fill="white" opacity="0.1"/><circle cx="170" cy="70" r="20" fill="white" opacity="0.08"/></svg>');
+            background-repeat: repeat;
+            background-size: 320px 200px;
+            pointer-events: none;
+            z-index: 2;
+            mix-blend-mode: overlay;
+        }
+
+        /* ----- NEW CURSOR STYLE (sailboat with flag) ----- */
+        .boat-cursor {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            filter: drop-shadow(0 10px 16px #022b44);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.08s;
+            will-change: left, top;
+        }
+
+        .boat-cursor i {
+            font-size: 4rem;
+            color: #fefefe;
+            text-shadow: 2px 5px 12px #02457a, 0 0 10px white;
+            transform: scale(1.05);
+        }
+
+        /* smaller wake behind */
+        .wake {
+            position: fixed;
+            width: 48px;
+            height: 24px;
+            background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.6) 0%, transparent 75%);
+            border-radius: 50%;
+            filter: blur(8px);
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.6;
+            mix-blend-mode: screen;
+        }
+
+        /* resume card – translucent floating */
+        .resume-card {
+            max-width: 1220px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 3.8rem 3rem 3.8rem 3rem;
+            box-shadow: 0 40px 70px -20px #012b48, 0 0 0 2px rgba(255, 255, 255, 0.8) inset;
+            padding: 2.3rem 2.8rem;
+            transition: transform 0.02s;
+            will-change: transform;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 30;
+            color: #013a62;
+        }
+
+        /* photo header */
+        .photo-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #cbe5fe;
+            padding-bottom: 1.2rem;
+        }
+
+        .photo-frame {
+            width: 150px;
+            height: 150px;
+            border-radius: 60% 40% 65% 35% / 45% 55% 45% 55%;
+            background: linear-gradient(150deg, #cae6ff, #7cb9f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid white;
+            box-shadow: 0 22px 26px -10px #215f8a;
+        }
+
+        .photo-frame i {
+            font-size: 6.2rem;
+            color: #ffffff;
+            filter: drop-shadow(0 4px 6px #15507c);
+        }
+
+        .name-title h1 {
+            font-size: 3.3rem;
+            font-weight: 600;
+            color: #003363;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.7);
+        }
+
+        .name-title .sub {
+            background: #c2e2ff;
+            padding: 0.4rem 1.8rem;
+            border-radius: 40px;
+            color: #014177;
+            border: 1px solid white;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(5px);
+            padding: 1.3rem 2.2rem;
+            border-radius: 60px;
+            margin: 1.5rem 0 2rem;
+            border: 1px solid white;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            color: #003e75;
+            font-weight: 500;
+        }
+
+        .contact-item i {
+            background: white;
+            border-radius: 50%;
+            width: 2.1rem;
+            height: 2.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0165ad;
+        }
+
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #003868;
+            border-left: 12px solid #7fbaf5;
+            padding-left: 1.2rem;
+            margin: 2rem 0 1.2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(6px);
+            border-radius: 2.2rem;
+            padding: 1.5rem 1.8rem;
+            border: 1px solid white;
+            box-shadow: 0 6px 20px #b6d7f7;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chip-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .chip {
+            background: #daecff;
+            padding: 0.3rem 1.3rem;
+            border-radius: 40px;
+            border: 1px solid white;
+            color: #014685;
+        }
+
+        /* contact form */
+        .form-section {
+            margin: 2.5rem 0 1.5rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 3rem;
+            padding: 2rem 2.3rem;
+            border: 1px solid white;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            flex: 1 1 240px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #014073;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1.3rem;
+            border-radius: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            outline: none;
+            transition: 0.2s;
+            color: #002a4a;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #1c7ed6;
+            box-shadow: 0 0 0 3px rgba(0,110,230,0.2);
+        }
+
+        .btn-send {
+            background: #196cbd;
+            color: white;
+            border: none;
+            padding: 0.9rem 2.6rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 8px 16px #094377;
+            transition: 0.2s;
+            border: 1px solid white;
+            margin-top: 1.2rem;
+        }
+
+        .btn-send:hover {
+            background: #0b5090;
+            transform: scale(1.02);
+        }
+
+        .form-message {
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        .signature-block {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            border-top: 2px dashed #b7d6f5;
+            padding-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .declaration {
+            background: #e8f2ff;
+            padding: 1rem 2rem;
+            border-radius: 50px 20px;
+        }
+
+        .signature span {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 2rem;
+            border-top: 1px solid #9ac2e5;
+            display: block;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+        }
+
+        @media (max-width:700px){
+            .resume-card{padding:1.5rem;}
+        }
+    </style>
+</head>
+<body>
+    <!-- full water overlay -->
+    <div class="water-cover"></div>
+    <div class="water-pattern"></div>
+
+    <!-- NEW CURSOR: sailboat with flag (fontawesome) -->
+    <div class="boat-cursor" id="boatCursor">
+        <i class="fa-solid fa-sailboat"></i>   <!-- changed to sailboat, feels like water -->
+    </div>
+    <div class="wake" id="boatWake"></div>
+
+    <!-- main resume card -->
+    <div class="resume-card" id="resumeCard">
+        <!-- photo & name -->
+        <div class="photo-header">
+            <div class="photo-frame"><i class="fas fa-user-circle"></i></div>
+            <div class="name-title">
+                <h1>Arnav Sharma</h1>
+                <div class="sub"><i class="fas fa-location-dot"></i> Prayagraj, U.P.</div>
+            </div>
+        </div>
+
+        <!-- contact row exact data -->
+        <div class="contact-row">
+            <div class="contact-item"><i class="fas fa-phone-alt"></i> 7753932657</div>
+            <div class="contact-item"><i class="fas fa-map-pin"></i> Village Dando, Post Rokari</div>
+            <div class="contact-item"><i class="fas fa-city"></i> Distric Prayagraj (U.P.)</div>
+            <div class="contact-item"><i class="fas fa-envelope"></i> arnvsharma5245@gmail.com</div>
+            <div class="contact-item"><i class="fas fa-mail-bulk"></i> PIN 212307</div>
+        </div>
+
+        <!-- objective -->
+        <div class="section-title"><i class="fas fa-bullseye"></i> Career Objective</div>
+        <div class="info-box" style="background:rgba(255,255,255,0.7); margin-bottom:1.5rem;">
+            To secure a challenging and responsible position in a reputable organization where I can effectively utilize my knowledge, technical skills, and dedication to contribute to the success and growth of the organization. I aim to work in a dynamic and learning-oriented environment that encourages innovation, creativity, and professional development. I am eager to continuously improve my abilities, gain valuable experience, and adapt to new technologies while maintaining a high level of professionalism, integrity, and commitment. My objective is to build a successful career by contributing positively to organizational goals while enhancing my personal and professional skills through continuous learning and hard work.
+        </div>
+
+        <!-- two columns: O Level added -->
+        <div class="grid-2">
+            <div class="info-box">
+                <strong><i class="fas fa-laptop-code"></i> Computer Knowledge</strong>
+                <ul class="info-list">
+                    <li><i class="fas fa-diploma"></i> Advance Diploma In Computer Application (ADCA) – ASIT Institute</li>
+                    <li><i class="fas fa-certificate"></i> Course on Computer Concept (CCC) – NIELIT</li>
+                    <li><i class="fas fa-plus-circle"></i> <strong>O Level</strong> – NIELIT</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <strong><i class="fas fa-graduation-cap"></i> Academic qualification</strong>
+                <ul class="info-list">
+                    <li><i class="fas fa-school"></i> Intermediate from U.P. Board Allahabad with second division in 2022</li>
+                    <li><i class="fas fa-school"></i> High School from U.P. Board Allahabad with first division in 2020</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- personal & strength -->
+        <div class="grid-2" style="margin-top:1rem;">
+            <div class="info-box">
+                <strong><i class="fas fa-id-card"></i> Personal Information</strong>
+                <ul class="info-list">
+                    <li><i class="fas fa-user"></i> Name : Arnav Sharma</li>
+                    <li><i class="fas fa-user-tie"></i> Father’s Name : Sivram Sharma</li>
+                    <li><i class="fas fa-calendar-alt"></i> D.O.B. : 20/07/2004</li>
+                    <li><i class="fas fa-venus-mars"></i> Gender : Male</li>
+                    <li><i class="fas fa-flag"></i> Nationality : Indian</li>
+                    <li><i class="fas fa-language"></i> Language Know : Hindi, English</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <strong><i class="fas fa-dumbbell"></i> Strength</strong>
+                <div class="chip-list">
+                    <span class="chip">Hard Working</span>
+                    <span class="chip">Leadership Quality</span>
+                    <span class="chip">Adaptability</span>
+                    <span class="chip">Honesty</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT FORM (sends to Gmail) -->
+        <div class="form-section">
+            <div style="display:flex; gap:0.7rem; align-items:center; margin-bottom:1.2rem;">
+                <i class="fas fa-paper-plane" style="font-size:2rem; color:#0157a1;"></i>
+                <h2 style="color:#00305a;">send message (direct to Gmail)</h2>
+            </div>
+            <form id="gmailForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="far fa-user"></i> Your name</label>
+                        <input type="text" id="nameInput" placeholder="e.g. Rajesh" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="far fa-envelope"></i> Your email</label>
+                        <input type="email" id="emailInput" placeholder="raj@example.com" required>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 0.8rem;">
+                    <label><i class="fas fa-comment"></i> Message</label>
+                    <textarea id="messageInput" rows="3" placeholder="I would like to hire you ..." required></textarea>
+                </div>
+                <button type="submit" class="btn-send"><i class="fa-solid fa-sailboat" style="margin-right:0.5rem;"></i> Send via Gmail</button>
+                <div id="formFeedback" class="form-message"></div>
+            </form>
+        </div>
+
+        <!-- Declaration & signature (exact) -->
+        <div class="signature-block">
+            <div class="declaration">
+                <i class="fas fa-check-circle" style="color:#1f6e43;"></i> <strong>Declaration</strong>: I hereby declare that all afore mentioned information is true and best to my knowledge.<br>
+                <span style="font-size:0.95rem;">Date __/__/__ &nbsp;&nbsp; Place : Dando Rokari Karachhana Prayagraj</span>
+            </div>
+            <div class="signature">
+                Signature <span>(Arnav Sharma)</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ========== WATER MOVEMENT (boat + card drift) ==========
+            const card = document.getElementById('resumeCard');
+            const boat = document.getElementById('boatCursor');
+            const wake = document.getElementById('boatWake');
+            let mouseX = window.innerWidth/2, mouseY = window.innerHeight/2;
+            let boatX = mouseX, boatY = mouseY;
+            let cardX = 0, cardY = 0;
+            let targetCardX = 0, targetCardY = 0;
+
+            const CARD_SMOOTH = 0.04;
+            const BOAT_SMOOTH = 0.2;   // responsiveness
+
+            function onMouseMove(e) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            }
+
+            function animationFrame() {
+                // dynamic window dimensions
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+                const cX = w/2;
+                const cY = h/2;
+
+                // card drift (norm based on cursor)
+                const normX = (mouseX - cX) / (w * 0.5);
+                const normY = (mouseY - cY) / (h * 0.5);
+                targetCardX = normX * 24;   // water drift range
+                targetCardY = normY * 16;
+                cardX += (targetCardX - cardX) * CARD_SMOOTH;
+                cardY += (targetCardY - cardY) * CARD_SMOOTH;
+                if (card) {
+                    card.style.transform = `translate(${cardX}px, ${cardY}px) rotate(${normX*0.7}deg)`;
+                }
+
+                // boat follow
+                boatX += (mouseX - boatX) * BOAT_SMOOTH;
+                boatY += (mouseY - boatY) * BOAT_SMOOTH;
+                if (boat) {
+                    boat.style.left = boatX + 'px';
+                    boat.style.top = boatY + 'px';
+                    // slight rotation for fun
+                    const dx = mouseX - boatX;
+                    boat.style.transform = `translate(-50%, -50%) rotate(${dx*0.4}deg)`;
+                }
+                if (wake) {
+                    let wakeX = boatX - (mouseX - boatX)*1.9;
+                    let wakeY = boatY - (mouseY - boatY)*1.9;
+                    wake.style.left = wakeX + 'px';
+                    wake.style.top = wakeY + 'px';
+                    wake.style.opacity = 0.5 + Math.random()*0.2;
+                }
+
+                requestAnimationFrame(animationFrame);
+            }
+
+            window.addEventListener('mousemove', onMouseMove);
+            animationFrame();
+
+            // ========== CONTACT FORM -> GMAIL ==========
+            const form = document.getElementById('gmailForm');
+            const feedback = document.getElementById('formFeedback');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const name = document.getElementById('nameInput').value.trim();
+                const email = document.getElementById('emailInput').value.trim();
+                const message = document.getElementById('messageInput').value.trim();
+
+                if (!name || !email || !message) {
+                    feedback.innerHTML = '<span style="color:#b13b3b;">⚠️ all fields required</span>';
+                    return;
+                }
+
+                // Compose email body
+                const subject = "Message from resume website - Arnav Sharma";
+                const body = `Name: ${name}%0AEmail: ${email}%0A%0AMessage:%0A${message.replace(/\n/g, '%0A')}`;
+
+                // mailto (opens gmail web or default client)
+                const mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=arnvsharma5245@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.replace(/%0A/g, '\n').replace(/\n/g, '%0A'))}`;
+                window.open(mailtoLink, '_blank');
+
+                feedback.innerHTML = '<span style="color:#0b6e30;">✅ Gmail opened — ready to send!</span>';
+                // optional reset
+                document.getElementById('nameInput').value = '';
+                document.getElementById('emailInput').value = '';
+                document.getElementById('messageInput').value = '';
+            });
+
+            // initial cursor position
+            setTimeout(()=>{
+                mouseX = window.innerWidth/2;
+                mouseY = window.innerHeight/2;
+                boatX = mouseX; boatY = mouseY;
+            }, 30);
+        })();
+    </script>
+</body>
+</html>
