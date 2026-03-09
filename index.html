@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arnav Sharma</title>
+    <title>Arnav Sharma · simple water theme resume</title>
     <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -14,104 +14,62 @@
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
         }
 
-        /* ----- FULL SCREEN WATER (complete cover) ----- */
+        /* ----- light blue water background (full screen) ----- */
         body {
             min-height: 100vh;
             width: 100%;
-            background: radial-gradient(circle at 30% 40%, #6ab0ec, #1f6faa 80%, #094677);
+            background: linear-gradient(145deg, #9fcdf5, #c0e2ff, #dbeefe);
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1.8rem 1.2rem;
-            cursor: none;          /* hide default, show custom cursor */
+            padding: 2rem 1.5rem;
+            /* default cursor - no custom boat */
+            cursor: auto;
             overflow-x: hidden;
         }
 
-        /* water surface layers – fill entire screen */
-        .water-cover {
+        /* water overlay with waves (purely visual) */
+        .water-ambient {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: 
-                radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.3) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, rgba(230, 245, 255, 0.35) 0%, transparent 45%),
-                repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 15px, transparent 15px, transparent 35px),
-                linear-gradient(135deg, #3f9be0, #7fc4f0, #b3dcff);
-            box-shadow: inset 0 0 90px #8cc3f0, 0 0 0 2px rgba(255,255,255,0.2) inset;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.3) 0%, transparent 45%),
+                        radial-gradient(circle at 80% 70%, rgba(255, 250, 220, 0.25) 0%, transparent 50%),
+                        repeating-linear-gradient(45deg, rgba(255,255,255,0.07) 0px, rgba(255,255,255,0.07) 18px, transparent 18px, transparent 38px);
             pointer-events: none;
-            z-index: 1;
-            opacity: 0.99;
-            backdrop-filter: blur(1px);
+            z-index: 0;
         }
 
-        /* floating wave pattern */
-        .water-pattern {
+        /* wave pattern */
+        .wave-pattern {
             position: fixed;
             width: 100%;
             height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" opacity="0.12"><path d="M0 35 Q 30 15, 60 35 T 120 35 T 180 35 T 240 35" stroke="white" fill="none" stroke-width="3"/><path d="M0 85 Q 40 105, 85 85 T 160 85 T 220 85" stroke="white" fill="none" stroke-width="2.5" opacity="0.6"/><circle cx="90" cy="20" r="14" fill="white" opacity="0.1"/><circle cx="170" cy="70" r="20" fill="white" opacity="0.08"/></svg>');
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" opacity="0.1"><path d="M0 30 Q 25 12, 50 30 T 100 30 T 150 30 T 200 30" stroke="white" fill="none" stroke-width="3"/><path d="M0 70 Q 35 90, 70 70 T 140 70 T 200 70" stroke="white" fill="none" stroke-width="2.5"/></svg>');
             background-repeat: repeat;
-            background-size: 320px 200px;
+            background-size: 280px 140px;
             pointer-events: none;
-            z-index: 2;
-            mix-blend-mode: overlay;
+            z-index: 1;
+            mix-blend-mode: soft-light;
         }
 
-        /* ----- NEW CURSOR STYLE (sailboat with flag) ----- */
-        .boat-cursor {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            filter: drop-shadow(0 10px 16px #022b44);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.08s;
-            will-change: left, top;
-        }
-
-        .boat-cursor i {
-            font-size: 4rem;
-            color: #fefefe;
-            text-shadow: 2px 5px 12px #02457a, 0 0 10px white;
-            transform: scale(1.05);
-        }
-
-        /* smaller wake behind */
-        .wake {
-            position: fixed;
-            width: 48px;
-            height: 24px;
-            background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.6) 0%, transparent 75%);
-            border-radius: 50%;
-            filter: blur(8px);
-            pointer-events: none;
-            z-index: 9998;
-            opacity: 0.6;
-            mix-blend-mode: screen;
-        }
-
-        /* resume card – translucent floating */
+        /* resume card – clean white with light blue shadow */
         .resume-card {
-            max-width: 1220px;
+            max-width: 1200px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(16px) saturate(180%);
-            border-radius: 3.8rem 3rem 3.8rem 3rem;
-            box-shadow: 0 40px 70px -20px #012b48, 0 0 0 2px rgba(255, 255, 255, 0.8) inset;
-            padding: 2.3rem 2.8rem;
-            transition: transform 0.02s;
-            will-change: transform;
-            border: 1px solid rgba(255, 255, 255, 0.9);
+            background-color: #ffffff;
+            border-radius: 2.8rem;
+            box-shadow: 0 20px 40px -10px #3b80b0, 0 10px 20px -5px #b0d6f5;
+            padding: 2.5rem 3rem;
             position: relative;
-            z-index: 30;
-            color: #013a62;
+            z-index: 20;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            color: #01335c;
+            transition: transform 0.2s ease-out; /* simple drift on hover – but we'll add mouse move */
+            will-change: transform;
         }
 
         /* photo header */
@@ -120,82 +78,83 @@
             flex-wrap: wrap;
             gap: 2rem;
             align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #cbe5fe;
+            margin-bottom: 1.8rem;
+            border-bottom: 2px solid #cde4fc;
             padding-bottom: 1.2rem;
         }
 
         .photo-frame {
-            width: 150px;
-            height: 150px;
-            border-radius: 60% 40% 65% 35% / 45% 55% 45% 55%;
-            background: linear-gradient(150deg, #cae6ff, #7cb9f0);
+            width: 140px;
+            height: 140px;
+            border-radius: 50% 50% 45% 55% / 50% 45% 55% 50%;
+            background: linear-gradient(145deg, #b3d9ff, #7bb3e0);
             display: flex;
             align-items: center;
             justify-content: center;
             border: 5px solid white;
-            box-shadow: 0 22px 26px -10px #215f8a;
+            box-shadow: 0 15px 20px -8px #38658b;
         }
 
         .photo-frame i {
-            font-size: 6.2rem;
-            color: #ffffff;
-            filter: drop-shadow(0 4px 6px #15507c);
+            font-size: 5.5rem;
+            color: white;
+            filter: drop-shadow(2px 4px 4px #1c5075);
         }
 
         .name-title h1 {
-            font-size: 3.3rem;
+            font-size: 3rem;
             font-weight: 600;
-            color: #003363;
-            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.7);
+            color: #003160;
         }
 
         .name-title .sub {
-            background: #c2e2ff;
-            padding: 0.4rem 1.8rem;
+            background: #daedff;
+            padding: 0.3rem 1.8rem;
             border-radius: 40px;
-            color: #014177;
+            color: #00447c;
             border: 1px solid white;
             display: inline-block;
-            font-weight: 500;
+            margin-top: 0.2rem;
         }
 
+        /* contact row */
         .contact-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(5px);
-            padding: 1.3rem 2.2rem;
-            border-radius: 60px;
-            margin: 1.5rem 0 2rem;
-            border: 1px solid white;
+            gap: 1.2rem 2.2rem;
+            background: #f1f9ff;
+            padding: 1.2rem 2rem;
+            border-radius: 50px;
+            margin: 1.8rem 0 2rem;
+            border: 1px solid #cce3fc;
         }
 
         .contact-item {
             display: flex;
             align-items: center;
             gap: 0.7rem;
-            color: #003e75;
+            color: #003f73;
             font-weight: 500;
         }
 
         .contact-item i {
             background: white;
             border-radius: 50%;
-            width: 2.1rem;
-            height: 2.1rem;
+            width: 2rem;
+            height: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #0165ad;
+            box-shadow: 0 4px 6px #b9d6f0;
         }
 
+        /* sections */
         .section-title {
-            font-size: 1.7rem;
+            font-size: 1.6rem;
             font-weight: 600;
-            color: #003868;
-            border-left: 12px solid #7fbaf5;
+            color: #003160;
+            border-left: 10px solid #8fc5f0;
             padding-left: 1.2rem;
             margin: 2rem 0 1.2rem 0;
             display: flex;
@@ -205,17 +164,23 @@
 
         .grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
             gap: 1.5rem;
         }
 
         .info-box {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(6px);
-            border-radius: 2.2rem;
+            background: #f5fbff;
+            border-radius: 2rem;
             padding: 1.5rem 1.8rem;
-            border: 1px solid white;
-            box-shadow: 0 6px 20px #b6d7f7;
+            border: 1px solid #d5e9ff;
+            box-shadow: 0 5px 12px #cde2f9;
+        }
+
+        .info-box strong {
+            font-size: 1.2rem;
+            color: #003363;
+            display: block;
+            margin-bottom: 0.7rem;
         }
 
         .info-list {
@@ -223,9 +188,14 @@
         }
 
         .info-list li {
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.7rem;
             display: flex;
             gap: 1rem;
+        }
+
+        .info-list li i {
+            width: 1.4rem;
+            color: #0263af;
         }
 
         .chip-list {
@@ -235,20 +205,19 @@
         }
 
         .chip {
-            background: #daecff;
-            padding: 0.3rem 1.3rem;
+            background: #e3f0ff;
+            padding: 0.3rem 1.2rem;
             border-radius: 40px;
             border: 1px solid white;
-            color: #014685;
+            color: #014a83;
         }
 
-        /* contact form */
+        /* form section */
         .form-section {
-            margin: 2.5rem 0 1.5rem;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(8px);
-            border-radius: 3rem;
-            padding: 2rem 2.3rem;
+            margin: 2.5rem 0 1.8rem;
+            background: #f1f9ff;
+            border-radius: 2.8rem;
+            padding: 2rem 2.5rem;
             border: 1px solid white;
         }
 
@@ -265,71 +234,68 @@
         .form-group label {
             display: block;
             font-weight: 600;
-            color: #014073;
-            margin-bottom: 0.4rem;
+            color: #01447a;
+            margin-bottom: 0.3rem;
         }
 
         .form-group input, .form-group textarea {
             width: 100%;
-            padding: 0.8rem 1.3rem;
+            padding: 0.8rem 1.2rem;
             border-radius: 40px;
-            border: 2px solid rgba(255, 255, 255, 0.9);
-            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #c4defa;
+            background: white;
             font-size: 1rem;
             outline: none;
-            transition: 0.2s;
-            color: #002a4a;
         }
 
         .form-group input:focus, .form-group textarea:focus {
-            border-color: #1c7ed6;
-            box-shadow: 0 0 0 3px rgba(0,110,230,0.2);
+            border-color: #0080ff;
+            box-shadow: 0 0 0 3px rgba(0,110,230,0.15);
         }
 
         .btn-send {
-            background: #196cbd;
+            background: #1f6db0;
             color: white;
             border: none;
-            padding: 0.9rem 2.6rem;
+            padding: 0.9rem 2.5rem;
             border-radius: 50px;
             font-weight: 600;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            box-shadow: 0 8px 16px #094377;
-            transition: 0.2s;
-            border: 1px solid white;
+            box-shadow: 0 8px 14px #26659e;
             margin-top: 1.2rem;
+            border: 1px solid white;
+            transition: 0.15s;
         }
 
         .btn-send:hover {
-            background: #0b5090;
-            transform: scale(1.02);
+            background: #0e5090;
         }
 
         .form-message {
-            margin-top: 1rem;
-            font-weight: 500;
+            margin-top: 0.8rem;
         }
 
+        /* signature */
         .signature-block {
             display: flex;
             justify-content: space-between;
             margin-top: 2rem;
-            border-top: 2px dashed #b7d6f5;
+            border-top: 2px dashed #bdd6f2;
             padding-top: 1.5rem;
             flex-wrap: wrap;
         }
 
         .declaration {
-            background: #e8f2ff;
+            background: #ecf5ff;
             padding: 1rem 2rem;
             border-radius: 50px 20px;
         }
 
         .signature span {
             font-family: 'Brush Script MT', cursive;
-            font-size: 2rem;
-            border-top: 1px solid #9ac2e5;
+            font-size: 1.8rem;
+            border-top: 1px solid #a2c3e2;
             display: block;
             margin-top: 0.5rem;
             padding-top: 0.5rem;
@@ -341,17 +307,11 @@
     </style>
 </head>
 <body>
-    <!-- full water overlay -->
-    <div class="water-cover"></div>
-    <div class="water-pattern"></div>
+    <!-- water background layers (just visuals) -->
+    <div class="water-ambient"></div>
+    <div class="wave-pattern"></div>
 
-    <!-- NEW CURSOR: sailboat with flag (fontawesome) -->
-    <div class="boat-cursor" id="boatCursor">
-        <i class="fa-solid fa-sailboat"></i>   <!-- changed to sailboat, feels like water -->
-    </div>
-    <div class="wake" id="boatWake"></div>
-
-    <!-- main resume card -->
+    <!-- main resume card – white & clean -->
     <div class="resume-card" id="resumeCard">
         <!-- photo & name -->
         <div class="photo-header">
@@ -362,7 +322,7 @@
             </div>
         </div>
 
-        <!-- contact row exact data -->
+        <!-- contact row (exact data) -->
         <div class="contact-row">
             <div class="contact-item"><i class="fas fa-phone-alt"></i> 7753932657</div>
             <div class="contact-item"><i class="fas fa-map-pin"></i> Village Dando, Post Rokari</div>
@@ -373,18 +333,18 @@
 
         <!-- objective -->
         <div class="section-title"><i class="fas fa-bullseye"></i> Career Objective</div>
-        <div class="info-box" style="background:rgba(255,255,255,0.7); margin-bottom:1.5rem;">
-            To secure a challenging and responsible position in a reputable organization where I can effectively utilize my knowledge, technical skills, and dedication to contribute to the success and growth of the organization. I aim to work in a dynamic and learning-oriented environment that encourages innovation, creativity, and professional development. I am eager to continuously improve my abilities, gain valuable experience, and adapt to new technologies while maintaining a high level of professionalism, integrity, and commitment. My objective is to build a successful career by contributing positively to organizational goals while enhancing my personal and professional skills through continuous learning and hard work.
+        <div class="info-box" style="margin-bottom:1.5rem;">
+            Seeking a position in your organization where I can display my technical abilities and knowledge to contribute for the growth of your organization simultaneously helping me to fulfil my career objectives and widen my knowledge in rapid change field.
         </div>
 
-        <!-- two columns: O Level added -->
+        <!-- computer knowledge (incl O Level) + academic -->
         <div class="grid-2">
             <div class="info-box">
                 <strong><i class="fas fa-laptop-code"></i> Computer Knowledge</strong>
                 <ul class="info-list">
                     <li><i class="fas fa-diploma"></i> Advance Diploma In Computer Application (ADCA) – ASIT Institute</li>
                     <li><i class="fas fa-certificate"></i> Course on Computer Concept (CCC) – NIELIT</li>
-                    <li><i class="fas fa-plus-circle"></i> <strong>O Level</strong> – NIELIT</li>
+                    <li><i class="fas fa-plus-circle"></i> <strong>O Level (DOEACC/NIELIT)</strong> — completed</li>
                 </ul>
             </div>
             <div class="info-box">
@@ -396,7 +356,7 @@
             </div>
         </div>
 
-        <!-- personal & strength -->
+        <!-- personal + strength -->
         <div class="grid-2" style="margin-top:1rem;">
             <div class="info-box">
                 <strong><i class="fas fa-id-card"></i> Personal Information</strong>
@@ -441,12 +401,12 @@
                     <label><i class="fas fa-comment"></i> Message</label>
                     <textarea id="messageInput" rows="3" placeholder="I would like to hire you ..." required></textarea>
                 </div>
-                <button type="submit" class="btn-send"><i class="fa-solid fa-sailboat" style="margin-right:0.5rem;"></i> Send via Gmail</button>
+                <button type="submit" class="btn-send"><i class="fas fa-envelope" style="margin-right:0.5rem;"></i> Send via Gmail</button>
                 <div id="formFeedback" class="form-message"></div>
             </form>
         </div>
 
-        <!-- Declaration & signature (exact) -->
+        <!-- Declaration & signature -->
         <div class="signature-block">
             <div class="declaration">
                 <i class="fas fa-check-circle" style="color:#1f6e43;"></i> <strong>Declaration</strong>: I hereby declare that all afore mentioned information is true and best to my knowledge.<br>
@@ -460,66 +420,47 @@
 
     <script>
         (function() {
-            // ========== WATER MOVEMENT (boat + card drift) ==========
+            // ===== SIMPLE WATER DRIFT (card moves slightly with cursor, but no custom cursor) =====
             const card = document.getElementById('resumeCard');
-            const boat = document.getElementById('boatCursor');
-            const wake = document.getElementById('boatWake');
             let mouseX = window.innerWidth/2, mouseY = window.innerHeight/2;
-            let boatX = mouseX, boatY = mouseY;
             let cardX = 0, cardY = 0;
-            let targetCardX = 0, targetCardY = 0;
+            let targetX = 0, targetY = 0;
 
-            const CARD_SMOOTH = 0.04;
-            const BOAT_SMOOTH = 0.2;   // responsiveness
+            const SMOOTH = 0.05; // gentle drift
 
             function onMouseMove(e) {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
             }
 
-            function animationFrame() {
-                // dynamic window dimensions
+            function animate() {
                 const w = window.innerWidth;
                 const h = window.innerHeight;
-                const cX = w/2;
-                const cY = h/2;
+                const centerX = w/2;
+                const centerY = h/2;
 
-                // card drift (norm based on cursor)
-                const normX = (mouseX - cX) / (w * 0.5);
-                const normY = (mouseY - cY) / (h * 0.5);
-                targetCardX = normX * 24;   // water drift range
-                targetCardY = normY * 16;
-                cardX += (targetCardX - cardX) * CARD_SMOOTH;
-                cardY += (targetCardY - cardY) * CARD_SMOOTH;
+                // norm from -1 to 1
+                const normX = (mouseX - centerX) / (w * 0.5);
+                const normY = (mouseY - centerY) / (h * 0.5);
+
+                // max drift: 12px horizontally, 8px vertically
+                targetX = normX * 12;
+                targetY = normY * 8;
+
+                cardX += (targetX - cardX) * SMOOTH;
+                cardY += (targetY - cardY) * SMOOTH;
+
                 if (card) {
-                    card.style.transform = `translate(${cardX}px, ${cardY}px) rotate(${normX*0.7}deg)`;
+                    card.style.transform = `translate(${cardX}px, ${cardY}px)`;
                 }
 
-                // boat follow
-                boatX += (mouseX - boatX) * BOAT_SMOOTH;
-                boatY += (mouseY - boatY) * BOAT_SMOOTH;
-                if (boat) {
-                    boat.style.left = boatX + 'px';
-                    boat.style.top = boatY + 'px';
-                    // slight rotation for fun
-                    const dx = mouseX - boatX;
-                    boat.style.transform = `translate(-50%, -50%) rotate(${dx*0.4}deg)`;
-                }
-                if (wake) {
-                    let wakeX = boatX - (mouseX - boatX)*1.9;
-                    let wakeY = boatY - (mouseY - boatY)*1.9;
-                    wake.style.left = wakeX + 'px';
-                    wake.style.top = wakeY + 'px';
-                    wake.style.opacity = 0.5 + Math.random()*0.2;
-                }
-
-                requestAnimationFrame(animationFrame);
+                requestAnimationFrame(animate);
             }
 
             window.addEventListener('mousemove', onMouseMove);
-            animationFrame();
+            animate();
 
-            // ========== CONTACT FORM -> GMAIL ==========
+            // ===== CONTACT FORM -> GMAIL =====
             const form = document.getElementById('gmailForm');
             const feedback = document.getElementById('formFeedback');
 
@@ -539,7 +480,7 @@
                 const subject = "Message from resume website - Arnav Sharma";
                 const body = `Name: ${name}%0AEmail: ${email}%0A%0AMessage:%0A${message.replace(/\n/g, '%0A')}`;
 
-                // mailto (opens gmail web or default client)
+                // mailto (opens gmail web)
                 const mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=arnvsharma5245@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.replace(/%0A/g, '\n').replace(/\n/g, '%0A'))}`;
                 window.open(mailtoLink, '_blank');
 
@@ -549,14 +490,8 @@
                 document.getElementById('emailInput').value = '';
                 document.getElementById('messageInput').value = '';
             });
-
-            // initial cursor position
-            setTimeout(()=>{
-                mouseX = window.innerWidth/2;
-                mouseY = window.innerHeight/2;
-                boatX = mouseX; boatY = mouseY;
-            }, 30);
         })();
     </script>
+    <!-- all info included: O Level, full water background, contact form to gmail, and now default cursor (no custom boat) -->
 </body>
 </html>
